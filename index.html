@@ -1,1 +1,176 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NEXUS – Conectando estudantes a oportunidades</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #0d1117;
+      color: white;
+    }
+    header {
+      background: #161b22;
+      padding: 20px;
+      text-align: center;
+    }
+    header h1 {
+      margin: 0;
+      font-size: 2em;
+      color: white;
+    }
+    header p {
+      margin: 10px 0;
+      color: #c9d1d9;
+    }
+    .btn-container {
+      margin-top: 20px;
+    }
+    .btn {
+      background: #1f6feb;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      margin: 5px;
+      font-size: 1em;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .btn:hover {
+      background: #388bfd;
+    }
+    section {
+      padding: 40px;
+      max-width: 900px;
+      margin: auto;
+    }
+    h2 {
+      color: #f0f6fc;
+    }
+    select, button, input {
+      padding: 10px;
+      margin: 8px 0;
+      border-radius: 6px;
+      border: none;
+      font-size: 1em;
+    }
+    .card {
+      background: #21262d;
+      padding: 20px;
+      border-radius: 8px;
+      margin: 10px 0;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>NEXUS</h1>
+    <p>Conectando estudantes a oportunidades</p>
+    <div class="btn-container">
+      <button class="btn" onclick="scrollToSection('sobre')">Sobre o Projeto</button>
+      <button class="btn" onclick="scrollToSection('projetos')">Projetos</button>
+      <button class="btn" onclick="scrollToSection('teste')">Teste Vocacional</button>
+    </div>
+  </header>
+
+  <section id="sobre">
+    <h2>Sobre o Projeto</h2>
+    <p>
+      O NEXUS é uma plataforma que conecta estudantes às oportunidades acadêmicas e extracurriculares em suas universidades. 
+      Aqui, você pode explorar os principais projetos de diversas instituições e também realizar um teste vocacional para descobrir 
+      em quais áreas você pode se destacar.
+    </p>
+  </section>
+
+  <section id="projetos">
+    <h2>Explorar Projetos</h2>
+    <label for="universidade">Selecione sua universidade:</label>
+    <select id="universidade" onchange="mostrarProjetos()">
+      <option value="">-- Escolha --</option>
+      <option value="unifei">UNIFEI</option>
+      <option value="ufla">UFLA</option>
+      <option value="ufop">UFOP</option>
+      <option value="ufmg">UFMG</option>
+      <option value="ufsj">UFSJ</option>
+      <option value="uftm">UFTM</option>
+    </select>
+    <div id="listaProjetos"></div>
+  </section>
+
+  <section id="teste">
+    <h2>Teste Vocacional</h2>
+    <form id="testeForm">
+      <p>1. Você prefere trabalhar em grupo ou individualmente?</p>
+      <label><input type="radio" name="q1" value="grupo"> Grupo</label>
+      <label><input type="radio" name="q1" value="individual"> Individual</label>
+
+      <p>2. Você se interessa mais por atividades práticas ou teóricas?</p>
+      <label><input type="radio" name="q2" value="pratica"> Práticas</label>
+      <label><input type="radio" name="q2" value="teoria"> Teóricas</label>
+
+      <p>3. Prefere liderança ou execução?</p>
+      <label><input type="radio" name="q3" value="lideranca"> Liderança</label>
+      <label><input type="radio" name="q3" value="execucao"> Execução</label>
+
+      <p>4. Gosta mais de tecnologia ou de gestão?</p>
+      <label><input type="radio" name="q4" value="tecnologia"> Tecnologia</label>
+      <label><input type="radio" name="q4" value="gestao"> Gestão</label>
+
+      <p>5. Você se motiva mais por impacto social ou inovação?</p>
+      <label><input type="radio" name="q5" value="social"> Impacto Social</label>
+      <label><input type="radio" name="q5" value="inovacao"> Inovação</label>
+
+      <br><br>
+      <button type="button" onclick="calcularResultado()">Ver Resultado</button>
+    </form>
+    <div id="resultado"></div>
+  </section>
+
+  <script>
+    function scrollToSection(id) {
+      document.getElementById(id).scrollIntoView({ behavior: "smooth" });
+    }
+
+    const projetos = {
+      unifei: ["EcoVeículo - Sustentabilidade em transportes", "Enactus - Empreendedorismo social"],
+      ufla: ["PET Engenharia de Produção", "Empresa Júnior de Administração"],
+      ufop: ["Atlética Ouro Preto", "PET Engenharia Mecânica"],
+      ufmg: ["Companhia Júnior", "Núcleo de Inovação Tecnológica"],
+      ufsj: ["Liga Acadêmica de Saúde", "Empresa Júnior de Engenharia"],
+      uftm: ["PET Medicina", "Liga de Empreendedorismo"]
+    };
+
+    function mostrarProjetos() {
+      const univ = document.getElementById("universidade").value;
+      const lista = document.getElementById("listaProjetos");
+      lista.innerHTML = "";
+      if (univ && projetos[univ]) {
+        projetos[univ].forEach(p => {
+          lista.innerHTML += `<div class="card">${p}</div>`;
+        });
+      }
+    }
+
+    function calcularResultado() {
+      let form = document.forms["testeForm"];
+      let pontos = { tecnologia: 0, gestao: 0, social: 0, inovacao: 0 };
+
+      if (form.q2.value === "pratica") pontos.tecnologia++;
+      if (form.q2.value === "teoria") pontos.gestao++;
+      if (form.q4.value === "tecnologia") pontos.tecnologia++;
+      if (form.q4.value === "gestao") pontos.gestao++;
+      if (form.q5.value === "social") pontos.social++;
+      if (form.q5.value === "inovacao") pontos.inovacao++;
+
+      let resultado = Object.keys(pontos).reduce((a, b) => pontos[a] > pontos[b] ? a : b);
+
+      document.getElementById("resultado").innerHTML = `<h3>Seu perfil é: ${resultado.toUpperCase()}</h3>`;
+    }
+  </script>
+</body>
+</html>
 
